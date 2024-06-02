@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
             return supportedLocales.first;
           },
           onGenerateRoute: RouteManager.generate,
-          initialRoute: RouteManager.splashScreen,
+          initialRoute: RouteManager.signUp,
         );
       },
     );
