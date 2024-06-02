@@ -2,5 +2,10 @@
   "name": "Name",
   "email": "Email",
   "password": "Password",
-  "confirm_password": "Confirm Password"
+  "confirm_password": "Confirm Password",
+  "password_not_matched": "Password did not matched!",
+  "sign_up": "Sign Up",
+  "login": "Login",
+  "this_field_cannot_empty": "This field cannot be empty!",
+  "already_have_account": "Already have an account?"
 }
