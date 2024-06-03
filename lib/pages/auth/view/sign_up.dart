@@ -119,7 +119,7 @@ class SignUp extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(AppLocalization.of(context).getTranslatedValue('already_have_account'), style: const TextStyle(fontSize: 17),),
-                    TextButton(onPressed: () {}, child: Text(AppLocalization.of(context).getTranslatedValue('login'), style: const TextStyle(fontSize: 17),))
+                    TextButton(onPressed: () => Navigator.pop(context), child: Text(AppLocalization.of(context).getTranslatedValue('login'), style: const TextStyle(fontSize: 17),))
                   ],
                 ),
 
