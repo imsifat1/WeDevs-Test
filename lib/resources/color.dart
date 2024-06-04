@@ -6,7 +6,7 @@ const Color kPrimaryColor = Color(0xFFF75F55);
 const Color kAccentColor = Color(0xFFF75F55);
 const Color kSecondaryPrimaryColor = Color(0xFF6D6E71);
 
-const Color kBackgroundColorLight = Color(0xFFE5E5E5);
+const Color kBackgroundColorLight = Color(0xFFF8F8F8);
 const Color kBackgroundColorDark = Color(0xFF0f0f0f);
 
 Color get kBackgroundColorTilt => AppThemeNotifier.isDarkModeOn ? kBackgroundColorLight : kBackgroundColorDark;

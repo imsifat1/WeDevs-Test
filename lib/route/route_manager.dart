@@ -6,6 +6,7 @@ class RouteManager {
 
   static const String splashScreen = "/";
   static const String homePage = "/home-page";
+  static const String productPage = "/product-page";
   static const String login = "/login";
   static const String signUp = "/sign-up";
 
@@ -24,6 +25,9 @@ class RouteManager {
 
       case homePage:
         return MaterialPageRoute(builder: (_) => const HomePage());
+
+      case productPage:
+        return MaterialPageRoute(builder: (_) => ProductPage());
 
       default:
         return MaterialPageRoute(builder: (_) => const Scaffold(body: SafeArea(child: Center(child: Text("Page not found!")))));
