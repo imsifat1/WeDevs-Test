@@ -19,5 +19,14 @@
   "price_low_high": "Price Low > High",
   "price_high_low": "Price High > Low",
   "cancel": "Cancel",
-  "apply": "Apply"
+  "apply": "Apply",
+  "my_account": "My Account",
+  "accounts": "Accounts",
+  "notification": "Notification",
+  "wishlist": "Wishlist",
+  "full_name": "Full Name",
+  "street_address": "Street Address",
+  "apt_suite_bldg": "Apt, Suite, Bldg (optional)",
+  "zip_code": "Zip Code",
+  "save": "Save"
 }

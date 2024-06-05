@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
 
     Container(color: Colors.white,),
     Container(color: Colors.white,),
-    Container(color: Colors.white,),
+    AccountPage(),
   ];
 
 
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBody: true,
       body: _widgetOptions.elementAt(_bottomNavIndex),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: MediaQuery.of(context).viewInsets.bottom != 0 ? null : FloatingActionButton(
 
         // backgroundColor: LinearGradient(colors: []),
         child: Container(

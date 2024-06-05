@@ -20,10 +20,11 @@ class TextInputField extends StatelessWidget {
   final FloatingLabelBehavior? floatingLabelBehavior;
   final TextAlign? textAlign;
   final double? fontSize;
+  final bool borderColor;
 
   const TextInputField({Key? key, this.maxLength, this.minLines, this.maxLines, this.obscureText = false, this.controller, this.keyboardType = TextInputType.text,
     this.hint, this.prefixIcon, this.suffixIcon, this.validator, this.enable = true, this.onChanged, this.floatingLabelBehavior = FloatingLabelBehavior.never,
-    this.label, this.textAlign = TextAlign.left, this.fontSize,}) : super(key: key);
+    this.label, this.textAlign = TextAlign.left, this.fontSize, this.borderColor = false,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,15 +66,15 @@ class TextInputField extends StatelessWidget {
           vertical: 20,
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 0),
+          borderSide: BorderSide(color: Color(0xFF263238).withOpacity(.12), width: borderColor ? 1 : 0),
           borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 0),
+          borderSide: BorderSide(color: kPrimaryColor.withOpacity(.3), width: borderColor ? 1 : 0),
           borderRadius: BorderRadius.circular(10),
         ),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 0),
+          borderSide: BorderSide(color: Color(0xFF263238).withOpacity(.12), width: borderColor ? 1 : 0),
           borderRadius: BorderRadius.circular(10),
         ),
       ),

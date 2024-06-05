@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedev_test/pages/auth/bloc/toggle_visibility_cubit.dart';
 import 'package:wedev_test/route/route_manager.dart';
 
 import '../../../barrel/widgets.dart';
@@ -51,16 +53,28 @@ class Login extends StatelessWidget {
 
               const SizedBox(height: 20,),
 
-              TextInputField(
-                controller: _passwordTextController,
-                prefixIcon: const Icon(Icons.lock_outline_sharp, size: 22,),
-                hint: AppLocalization.of(context).getTranslatedValue('password'),
-                obscureText: true,
-                suffixIcon: IconButton(onPressed: () {}, icon: Icon(Icons.visibility, size: 22,)),
-                validator: (value) {
-                  if(value == null || value.isEmpty) return AppLocalization.of(context).getTranslatedValue('this_field_cannot_empty');
-                  return null;
-                },
+              BlocProvider(
+                create: (context) => ToggleVisibilityCubit(),
+                child: BlocBuilder<ToggleVisibilityCubit, bool>(
+                  builder: (context, state) {
+                    return TextInputField(
+                      controller: _passwordTextController,
+                      prefixIcon: const Icon(Icons.lock_outline_sharp, size: 22,),
+                      hint: AppLocalization.of(context).getTranslatedValue('password'),
+                      obscureText: state,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          context.read<ToggleVisibilityCubit>().toggle();
+                        },
+                        icon: Icon(state ? Icons.visibility : Icons.visibility_off, size: 22,),
+                      ),
+                      validator: (value) {
+                        if(value == null || value.isEmpty) return AppLocalization.of(context).getTranslatedValue('this_field_cannot_empty');
+                        return null;
+                      },
+                    );
+                  },
+                ),
               ),
 
               const SizedBox(height: 40,),

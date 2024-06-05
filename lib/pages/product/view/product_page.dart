@@ -5,7 +5,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:wedev_test/barrel/resources.dart';
 import 'package:wedev_test/barrel/widgets.dart';
 import 'package:wedev_test/localization/app_localization.dart';
-import 'package:wedev_test/product/bloc/checkbox_cubit.dart';
+
+import '../bloc/checkbox_cubit.dart';
 
 class ProductPage extends StatelessWidget {
   ProductPage({Key? key}) : super(key: key);
@@ -51,7 +52,7 @@ class ProductPage extends StatelessWidget {
                         child: CachedNetworkImage(
                           imageUrl: "https://img.freepik.com/free-photo/woman-with-shopping-bags-studio-yellow-background-isolated_1303-14286.jpg?w=360",
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => Center(child: SizedBox(height: 20, width: 20, child: const CircularProgressIndicator())),
+                          placeholder: (context, url) => const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator())),
                           errorWidget: (context, url, error) => const Icon(Icons.error, size: 20,),
                         ),
                       ),
@@ -137,7 +138,7 @@ class ProductPage extends StatelessWidget {
                   builder: (BuildContext context) {
                     return Container(
                       height: MediaQuery.of(context).size.height / 1.7,
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,11 +155,11 @@ class ProductPage extends StatelessWidget {
                             ),
                           ),
 
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
 
                           Text(AppLocalization.of(context).getTranslatedValue('filter'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
 
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
 
                           Column(
                             children: List.generate(_filterList.length, (index) {
@@ -167,19 +168,26 @@ class ProductPage extends StatelessWidget {
                                 child: BlocBuilder<CheckboxCubit, bool>(
                                   builder: (context, state) {
                                     return ListTile(
-                                      leading: Checkbox(
-                                        activeColor: kPrimaryColor,
-                                        side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(width: 2, color: kPrimaryColor)),
-                                        value: state,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(5)),
-                                        onChanged: (bool? value) {
-                                          context.read<CheckboxCubit>().toggleCheckbox();
-                                        },
+                                      leading: SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: Checkbox(
+                                          activeColor: kPrimaryColor,
+                                          side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(width: 2, color: kPrimaryColor)),
+                                          value: state,
+                                          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                                          splashRadius: 0,
+                                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(5)),
+                                          onChanged: (bool? value) {
+                                            context.read<CheckboxCubit>().toggleCheckbox();
+                                          },
+                                        ),
                                       ),
-                                      title: Text(AppLocalization.of(context).getTranslatedValue(_filterList[index])),
+                                      title: Text(AppLocalization.of(context).getTranslatedValue(_filterList[index]), style: TextStyle(fontSize: 15),),
                                       contentPadding: EdgeInsets.zero,
-                                      visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+                                      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                                       dense: true,
                                       horizontalTitleGap: 0,
                                       onTap: () {
@@ -192,35 +200,35 @@ class ProductPage extends StatelessWidget {
                             }),
                           ),
 
-                          SizedBox(height: 30,),
+                          const SizedBox(height: 30,),
 
                           Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {Navigator.pop(context);},
-                                  child: Text(AppLocalization.of(context).getTranslatedValue('cancel'), style: TextStyle(fontSize: 17, color: Color(0xFF818995)),),
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.white,
                                       padding: const EdgeInsets.symmetric(vertical: 20),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                                   ),
+                                  child: Text(AppLocalization.of(context).getTranslatedValue('cancel'), style: const TextStyle(fontSize: 17, color: Color(0xFF818995)),),
                                 ),
                               ),
 
-                              SizedBox(width: 20,),
+                              const SizedBox(width: 20,),
 
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text(AppLocalization.of(context).getTranslatedValue('apply'), style: TextStyle(fontSize: 17,),),
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFF1ABC9C),
+                                      backgroundColor: const Color(0xFF1ABC9C),
                                       padding: const EdgeInsets.symmetric(vertical: 20),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                                   ),
+                                  child: Text(AppLocalization.of(context).getTranslatedValue('apply'), style: const TextStyle(fontSize: 17,),),
                                 ),
                               )
                             ],
