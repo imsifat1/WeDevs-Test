@@ -34,35 +34,4 @@ class AppTheme {
       secondary: kAccentColor,
     ).copyWith(background: kBackgroundColorLight),
   );
-
-  static final ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-    primaryColor: kGreenAccentColor,
-    fontFamily: 'Inter',
-    colorScheme: const ColorScheme.dark().copyWith(
-      primary: kGreenAccentColor,
-      secondary: kAccentColor,
-    ),
-    scaffoldBackgroundColor: kBackgroundColorDark,
-    backgroundColor: kBackgroundColorDark,
-    textSelectionTheme: const TextSelectionThemeData(
-      cursorColor: kGreenAccentColor,
-    ),
-    focusColor: kGreenAccentColor,
-    appBarTheme: AppBarTheme(
-      elevation: 2,
-      backgroundColor: Colors.black,
-      shadowColor: Colors.grey[800],
-      iconTheme: IconThemeData(
-        color: Colors.white.withOpacity(.8),
-      ),
-      centerTitle: true,
-      titleTextStyle: TextStyles.appbarTitleStyle.copyWith(
-        color: Colors.white.withOpacity(.8),
-      ),
-    ),
-    inputDecorationTheme: InputDecorationTheme(
-      hintStyle: TextStyles.textFieldHintStyle,
-    ),
-  );
 }

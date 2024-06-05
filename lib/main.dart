@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:wedev_test/barrel/utils.dart';
 
 import 'barrel/themes.dart';
 import 'localization/app_localization.dart';
@@ -33,49 +33,40 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
+
   @override
   Widget build(BuildContext context) {
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
-    AppThemeNotifier.setTheme(brightness);
 
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: themeMode,
-      builder: (context, mode, _) {
+    return MaterialApp(
+      title: dotenv.env['APP_TITLE']!,
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      locale: _locale,
+      localizationsDelegates: const [
+        AppLocalization.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale("en", "US"),
+        Locale("bn", "BD"),
+      ],
+      localeResolutionCallback: (Locale? deviceLocale, Iterable<Locale> supportedLocales) {
 
-        return MaterialApp(
-          title: dotenv.env['APP_TITLE']!,
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: mode,
-          locale: _locale,
-          localizationsDelegates: const [
-            AppLocalization.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale("en", "US"),
-            Locale("bn", "BD"),
-          ],
-          localeResolutionCallback: (Locale? deviceLocale, Iterable<Locale> supportedLocales) {
+        for(var locale in supportedLocales) {
 
-            for(var locale in supportedLocales) {
+          if(locale.languageCode == deviceLocale!.languageCode &&
+              locale.countryCode == deviceLocale.countryCode) {
 
-              if(locale.languageCode == deviceLocale!.languageCode &&
-                  locale.countryCode == deviceLocale.countryCode) {
+            return deviceLocale;
+          }
+        }
 
-                return deviceLocale;
-              }
-            }
-
-            return supportedLocales.first;
-          },
-          onGenerateRoute: RouteManager.generate,
-          initialRoute: RouteManager.homePage,
-        );
+        return supportedLocales.first;
       },
+      onGenerateRoute: RouteManager.generate,
+      initialRoute: RouteManager.splashScreen,
     );
   }
 

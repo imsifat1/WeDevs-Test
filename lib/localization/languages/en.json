@@ -28,5 +28,9 @@
   "street_address": "Street Address",
   "apt_suite_bldg": "Apt, Suite, Bldg (optional)",
   "zip_code": "Zip Code",
-  "save": "Save"
+  "save": "Save",
+  "success": "Success",
+  "failed": "Failed",
+  "login_success": "Successfully Login!",
+  "processing": "Processing"
 }

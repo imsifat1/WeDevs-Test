@@ -115,11 +115,13 @@ class AccountPage extends StatelessWidget {
                     const Divider(thickness: 1.5, color: Color(0xFFD8D8D8),),
 
                     _listTileItem(context, 'assets/icons/heart.png', 'wishlist', []),
+
                   ],
                 ),
               ),
-            )
+            ),
 
+            SizedBox(height: 60,),
           ],
         ),
       ),
