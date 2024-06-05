@@ -10,12 +10,7 @@ class AppTheme {
     brightness: Brightness.light,
     primaryColor: kPrimaryColor,
     fontFamily: 'Inter',
-    colorScheme: const ColorScheme.light().copyWith(
-      primary: kPrimaryColor,
-      secondary: kAccentColor,
-    ),
     scaffoldBackgroundColor: kBackgroundColorLight,
-    backgroundColor: kBackgroundColorLight,
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: kPrimaryColor,
     ),
@@ -34,7 +29,10 @@ class AppTheme {
     ),
     inputDecorationTheme: InputDecorationTheme(
       hintStyle: TextStyles.textFieldHintStyle,
-    ),
+    ), colorScheme: const ColorScheme.light().copyWith(
+      primary: kPrimaryColor,
+      secondary: kAccentColor,
+    ).copyWith(background: kBackgroundColorLight),
   );
 
   static final ThemeData darkTheme = ThemeData(

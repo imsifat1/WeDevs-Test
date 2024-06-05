@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../barrel/models.dart';
-import '../barrel/utils.dart';
 import '../barrel/views.dart';
-import '../barrel/widgets.dart';
 
 class RouteManager {
 
   static const String splashScreen = "/";
-  static const String home = "/home";
+  static const String homePage = "/home-page";
+  static const String productPage = "/product-page";
+  static const String login = "/login";
   static const String signUp = "/sign-up";
 
   static Route<dynamic> generate(RouteSettings settings) {
@@ -18,8 +17,17 @@ class RouteManager {
       case splashScreen:
         return MaterialPageRoute(builder: (_) => SizedBox());
 
+      case login:
+        return MaterialPageRoute(builder: (_) => Login());
+
       case signUp:
         return MaterialPageRoute(builder: (_) => SignUp());
+
+      case homePage:
+        return MaterialPageRoute(builder: (_) => const HomePage());
+
+      case productPage:
+        return MaterialPageRoute(builder: (_) => ProductPage());
 
       default:
         return MaterialPageRoute(builder: (_) => const Scaffold(body: SafeArea(child: Center(child: Text("Page not found!")))));
