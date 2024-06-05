@@ -56,7 +56,7 @@ class TextInputField extends StatelessWidget {
         labelText: label,
         labelStyle: TextStyles.textFieldHintStyle.copyWith(
           fontSize: 18,
-          color: AppThemeNotifier.isDarkModeOn ? Colors.grey[300] : Colors.black.withOpacity(.75),
+          color: Colors.black.withOpacity(.75),
         ),
         errorStyle: TextStyles.textFieldErrorStyle,
         floatingLabelBehavior: floatingLabelBehavior,
@@ -66,7 +66,7 @@ class TextInputField extends StatelessWidget {
           vertical: 20,
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFF263238).withOpacity(.12), width: borderColor ? 1 : 0),
+          borderSide: BorderSide(color: const Color(0xFF263238).withOpacity(.12), width: borderColor ? 1 : 0),
           borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
@@ -74,7 +74,7 @@ class TextInputField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFF263238).withOpacity(.12), width: borderColor ? 1 : 0),
+          borderSide: BorderSide(color: const Color(0xFF263238).withOpacity(.12), width: borderColor ? 1 : 0),
           borderRadius: BorderRadius.circular(10),
         ),
       ),
