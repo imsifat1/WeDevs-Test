@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:wedev_test/barrel/utils.dart';
-import 'package:wedev_test/barrel/views.dart';
 
 import 'barrel/themes.dart';
 import 'localization/app_localization.dart';
@@ -34,13 +33,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
-  final _sharedPreference = MySharedPreference();
-
-  @override
-  void initState() {
-    super.initState();
-    getUserInfo();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +66,7 @@ class _MyAppState extends State<MyApp> {
         return supportedLocales.first;
       },
       onGenerateRoute: RouteManager.generate,
-      home: (currentUser != null && currentUser?.token != null) ? HomePage() : Login(),
+      initialRoute: RouteManager.splashScreen,
     );
   }
 
@@ -85,10 +77,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _locale = locale;
     });
-  }
-
-  void getUserInfo() async {
-    currentUser = await _sharedPreference.getUser();
   }
 }
 

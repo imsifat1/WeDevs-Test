@@ -15,7 +15,7 @@ class RouteManager {
     switch(settings.name){
 
       case splashScreen:
-        return MaterialPageRoute(builder: (_) => SizedBox());
+        return MaterialPageRoute(builder: (_) => SplashScreen());
 
       case login:
         return MaterialPageRoute(builder: (_) => Login());
