@@ -7,6 +7,7 @@ import 'package:wedev_test/barrel/widgets.dart';
 import 'package:wedev_test/localization/app_localization.dart';
 
 import '../bloc/checkbox_cubit.dart';
+import '../bloc/product_bloc.dart';
 
 class ProductPage extends StatelessWidget {
   ProductPage({Key? key}) : super(key: key);
@@ -21,100 +22,120 @@ class ProductPage extends StatelessWidget {
         backButtonEnabled: false,
         searchBarEnabled: true,
       ),
-      body: Column(
-        children: [
+      body: BlocProvider(
+        create: (context) => ProductBloc()..add(LoadProduct()),
+        child: BlocBuilder<ProductBloc, ProductState>(
+          builder: (context, state) {
+            if (state is ProductLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ProductLoaded) {
+              return Column(
+                children: [
 
-          _filterWidget(context),
+                  _filterWidget(context),
 
-          const SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
 
-          Expanded(
-            child: GridView.count(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              shrinkWrap: true,
-              // physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 5,
-              childAspectRatio: (1 / 1.5),
-              children: List.generate(10, (index) => Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-
-                      Expanded(
-                        flex: 2,
-                        child: CachedNetworkImage(
-                          imageUrl: "https://img.freepik.com/free-photo/woman-with-shopping-bags-studio-yellow-background-isolated_1303-14286.jpg?w=360",
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator())),
-                          errorWidget: (context, url, error) => const Icon(Icons.error, size: 20,),
+                  Expanded(
+                    child: GridView.count(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      shrinkWrap: true,
+                      // physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 5,
+                      childAspectRatio: (1 / 1.6),
+                      children: List.generate(state.product.length, (index) => Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
                         ),
-                      ),
-
-                      Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 8,),
 
-                            const Text('Girls Stylish Dresses…', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
-
-                            const SizedBox(height: 8,),
-
-                            RichText(
-                              text: const TextSpan(
-                                text: '',
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: '150\$',
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        decoration: TextDecoration.lineThrough,
-                                        fontSize: 15
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' 79\$',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                            Expanded(
+                              flex: 3,
+                              child: CachedNetworkImage(
+                                imageUrl: state.product[index].images?.first.src ?? '',
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator())),
+                                errorWidget: (context, url, error) => const Icon(Icons.error, size: 20,),
                               ),
                             ),
 
-                            RatingBar.builder(
-                              initialRating: 3,
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemSize: 15,
-                              itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 8,),
+
+                                      Text(state.product[index].name ?? '', maxLines: 2, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold,),),
+
+                                      const SizedBox(height: 8,),
+
+                                      RichText(
+                                        text: TextSpan(
+                                          text: '',
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: '${state.product[index].regularPrice ?? 0}\$',
+                                              style: const TextStyle(
+                                                  color: Colors.grey,
+                                                  decoration: TextDecoration.lineThrough,
+                                                  fontSize: 15
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: ' ${state.product[index].price ?? 0}\$',
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      RatingBar.builder(
+                                        initialRating: double.parse(state.product[index].averageRating ?? '0'),
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 15,
+                                        itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                        itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.amber,),
+                                        onRatingUpdate: (rating) {},
+                                        ignoreGestures: true,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              onRatingUpdate: (rating) {},
-                            ),
+                            )
                           ],
                         ),
-                      )
-                    ],
+                      )),
+                    ),
                   ),
-                ),
-              )),
-            ),
-          )
-        ],
+
+                  const SizedBox(height: 100,)
+                ],
+              );
+            } else if (state is ProductError) {
+              return Center(child: Text(state.message));
+            }
+
+            return Container();
+          },
+        ),
       ),
     );
   }
@@ -185,7 +206,7 @@ class ProductPage extends StatelessWidget {
                                           },
                                         ),
                                       ),
-                                      title: Text(AppLocalization.of(context).getTranslatedValue(_filterList[index]), style: TextStyle(fontSize: 15),),
+                                      title: Text(AppLocalization.of(context).getTranslatedValue(_filterList[index]), style: const TextStyle(fontSize: 15),),
                                       contentPadding: EdgeInsets.zero,
                                       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                                       dense: true,

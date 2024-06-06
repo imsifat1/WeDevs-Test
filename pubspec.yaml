@@ -55,6 +55,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/product_response.json
     - lib/localization/languages/bn.json
     - lib/localization/languages/en.json
     - .env.development
