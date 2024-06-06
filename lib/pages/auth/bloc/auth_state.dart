@@ -43,3 +43,17 @@ class RegistrationFailedState extends AuthState {
   @override
   List<Object?> get props => [message];
 }
+
+class UpdateUserSuccessState extends AuthState {
+  final User user;
+  const UpdateUserSuccessState({required this.user});
+  @override
+  List<Object?> get props => [user];
+}
+
+class UpdateUserFailedState extends AuthState {
+  final String message;
+  const UpdateUserFailedState({required this.message});
+  @override
+  List<Object?> get props => [message];
+}

@@ -21,3 +21,12 @@ class OnRegistrationEvent extends AuthEvent{
   @override
   List<Object?> get props => [name, email, pass];
 }
+
+class OnUpdateUserEvent extends AuthEvent{
+  final String? name, email, password;
+
+  const OnUpdateUserEvent({this.name, this.email, this.password,});
+
+  @override
+  List<Object?> get props => [name, email, password];
+}

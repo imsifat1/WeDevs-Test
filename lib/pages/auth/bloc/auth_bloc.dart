@@ -64,5 +64,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
     });
+
+    on<OnUpdateUserEvent>((event, emit) async {
+      emit(AuthLoadingState());
+      try {
+        final response = await _authRepository.updateUser(event.name, event.email, event.password);
+        final jsonData = json.decode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+
+          var user = currentUser;
+          user?.userDisplayNme = jsonData['name'];
+          user?.userEmail = jsonData['email'];
+
+          _mySharedPreference.setUser(user!);
+
+          emit(UpdateUserSuccessState(user: user));
+          return;
+        } else {
+
+          emit(UpdateUserFailedState(message: jsonData['message']));
+          return;
+        }
+      } on AppException catch (error) {
+        emit(UpdateUserFailedState(message: error.message));
+        return;
+      } catch (e) {
+        emit(UpdateUserFailedState(message: e.toString()));
+        return;
+      }
+    });
   }
 }

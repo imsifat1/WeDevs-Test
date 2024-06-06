@@ -20,12 +20,17 @@ class ProductPage extends StatelessWidget {
       appBar: CustomAppbar(
         title: AppLocalization.of(context).getTranslatedValue('product_list'),
         backButtonEnabled: false,
-        searchBarEnabled: true,
+        actions: [
+          IconButton(onPressed: () => () {}, icon: const Icon(Icons.search, color: Colors.black, size: 22,))
+        ],
       ),
       body: BlocProvider(
         create: (context) => ProductBloc()..add(LoadProduct()),
         child: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, state) {
+            if (state is ProductInitial) {
+              return const Center(child: CircularProgressIndicator());
+            }
             if (state is ProductLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is ProductLoaded) {
