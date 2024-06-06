@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedev_test/pages/auth/bloc/auth_bloc.dart';
-import 'package:wedev_test/pages/auth/bloc/toggle_visibility_cubit.dart';
+import 'package:wedev_test/pages/auth/cubit/toggle_visibility_cubit.dart';
 import 'package:wedev_test/route/route_manager.dart';
 
 import '../../../barrel/utils.dart';

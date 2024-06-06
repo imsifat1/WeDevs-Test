@@ -6,7 +6,7 @@ import 'package:wedev_test/barrel/resources.dart';
 import 'package:wedev_test/barrel/widgets.dart';
 import 'package:wedev_test/localization/app_localization.dart';
 
-import '../bloc/checkbox_cubit.dart';
+import '../cubit/checkbox_cubit.dart';
 import '../bloc/product_bloc.dart';
 
 class ProductPage extends StatelessWidget {
