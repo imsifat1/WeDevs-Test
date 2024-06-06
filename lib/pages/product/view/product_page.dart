@@ -5,7 +5,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:wedev_test/barrel/resources.dart';
 import 'package:wedev_test/barrel/widgets.dart';
 import 'package:wedev_test/localization/app_localization.dart';
+import 'package:wedev_test/pages/product/cubit/filter_cubit.dart';
 
+import '../../../model/filter.dart';
+import '../../../model/product.dart';
 import '../cubit/checkbox_cubit.dart';
 import '../bloc/product_bloc.dart';
 
@@ -13,6 +16,7 @@ class ProductPage extends StatelessWidget {
   ProductPage({Key? key}) : super(key: key);
 
   final _filterList = ['newest', 'oldest', 'price_low_high', 'price_high_low', 'best_selling',];
+  List<Product> _productList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,12 @@ class ProductPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) => ProductBloc()..add(LoadProduct()),
-        child: BlocBuilder<ProductBloc, ProductState>(
+        child: BlocConsumer<ProductBloc, ProductState>(
+          listener: (context, state) {
+            if (state is ProductLoaded) {
+              _productList = state.product;
+            }
+          },
           builder: (context, state) {
             if (state is ProductInitial) {
               return const Center(child: CircularProgressIndicator());
@@ -50,7 +59,7 @@ class ProductPage extends StatelessWidget {
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 5,
                       childAspectRatio: (1 / 1.6),
-                      children: List.generate(state.product.length, (index) => Card(
+                      children: List.generate(_productList.length, (index) => Card(
                         elevation: 2,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -61,7 +70,7 @@ class ProductPage extends StatelessWidget {
                             Expanded(
                               flex: 3,
                               child: CachedNetworkImage(
-                                imageUrl: state.product[index].images?.first.src ?? '',
+                                imageUrl: _productList[index].images?.first.src ?? '',
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) => const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator())),
                                 errorWidget: (context, url, error) => const Icon(Icons.error, size: 20,),
@@ -80,7 +89,7 @@ class ProductPage extends StatelessWidget {
                                     children: [
                                       const SizedBox(height: 8,),
 
-                                      Text(state.product[index].name ?? '', maxLines: 2, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold,),),
+                                      Text(_productList[index].name ?? '', maxLines: 2, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold,),),
 
                                       const SizedBox(height: 8,),
 
@@ -89,7 +98,7 @@ class ProductPage extends StatelessWidget {
                                           text: '',
                                           children: <TextSpan>[
                                             TextSpan(
-                                              text: '${state.product[index].regularPrice ?? 0}\$',
+                                              text: '${_productList[index].regularPrice ?? 0}\$',
                                               style: const TextStyle(
                                                   color: Colors.grey,
                                                   decoration: TextDecoration.lineThrough,
@@ -97,7 +106,7 @@ class ProductPage extends StatelessWidget {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: ' ${state.product[index].price ?? 0}\$',
+                                              text: ' ${_productList[index].price ?? 0}\$',
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.black,
@@ -109,7 +118,7 @@ class ProductPage extends StatelessWidget {
                                       ),
 
                                       RatingBar.builder(
-                                        initialRating: double.parse(state.product[index].averageRating ?? '0'),
+                                        initialRating: double.parse(_productList[index].averageRating ?? '0'),
                                         minRating: 1,
                                         direction: Axis.horizontal,
                                         allowHalfRating: true,
@@ -146,6 +155,13 @@ class ProductPage extends StatelessWidget {
   }
 
   Widget _filterWidget(BuildContext context) {
+    final filterOption = [
+      Filter(title: 'newest', value: false),
+      Filter(title: 'oldest', value: false),
+      Filter(title: 'price_low_high', value: false),
+      Filter(title: 'price_high_low', value: false),
+      Filter(title: 'best_selling', value: false),
+    ];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: SizedBox(
@@ -187,12 +203,21 @@ class ProductPage extends StatelessWidget {
 
                           const SizedBox(height: 5,),
 
-                          Column(
-                            children: List.generate(_filterList.length, (index) {
-                              return BlocProvider(
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
                                 create: (context) => CheckboxCubit(),
-                                child: BlocBuilder<CheckboxCubit, bool>(
-                                  builder: (context, state) {
+                              ),
+                              BlocProvider(
+                                create: (context) => FilterCubit(),
+                              ),
+                            ],
+                            child: BlocConsumer<FilterCubit, FilterState>(
+                              listener: (context, state) {
+                              },
+                              builder: (context, state) {
+                                return Column(
+                                  children: List.generate(filterOption.length, (index) {
                                     return ListTile(
                                       leading: SizedBox(
                                         height: 24,
@@ -200,7 +225,7 @@ class ProductPage extends StatelessWidget {
                                         child: Checkbox(
                                           activeColor: kPrimaryColor,
                                           side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(width: 2, color: kPrimaryColor)),
-                                          value: state,
+                                          value: filterOption[index].value,
                                           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                                           splashRadius: 0,
                                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -217,13 +242,19 @@ class ProductPage extends StatelessWidget {
                                       dense: true,
                                       horizontalTitleGap: 0,
                                       onTap: () {
+
+                                        context.read<FilterCubit>().onFilter(_productList, index);
+
+                                        _productList.forEach((element) {
+                                          print(element.dateCreated);
+                                        });
                                         context.read<CheckboxCubit>().toggleCheckbox();
                                       },
                                     );
-                                  },
-                                ),
-                              );
-                            }),
+                                  }),
+                                );
+                              }
+                            ),
                           ),
 
                           const SizedBox(height: 30,),
