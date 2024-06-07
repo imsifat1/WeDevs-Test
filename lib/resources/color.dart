@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../barrel/themes.dart';
-
 const Color kPrimaryColor = Color(0xFFF75F55);
-const Color kAccentColor = Color(0xFFF75F55);
+const Color kAccentColor = Color(0xFFE88882);
 const Color kSecondaryPrimaryColor = Color(0xFF6D6E71);
 
 const Color kBackgroundColorLight = Color(0xFFF8F8F8);

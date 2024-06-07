@@ -9,7 +9,7 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: kPrimaryColor,
-    fontFamily: 'Inter',
+    fontFamily: 'Roboto',
     scaffoldBackgroundColor: kBackgroundColorLight,
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: kPrimaryColor,

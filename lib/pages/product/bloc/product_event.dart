@@ -7,3 +7,12 @@ abstract class ProductEvent extends Equatable {
 }
 
 class LoadProduct extends ProductEvent {}
+
+class ProductFilterEvent extends ProductEvent {
+  final List<Product> productList;
+  final int index;
+  const ProductFilterEvent({required this.productList, required this.index});
+
+  @override
+  List<Object> get props => [productList, index];
+}

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -13,12 +15,35 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductLoading());
       try {
         final data = await readJsonFile();
-        // final data = List<Product>.from(response.map((e) => Product.fromJson(e)));
 
         emit(ProductLoaded(data));
       } catch (e) {
-        emit(ProductError('Failed to load product data!'));
+        emit(const ProductError('Failed to load product data!'));
       }
+    });
+    
+    on<ProductFilterEvent>((event, emit) async {
+      List<Product> productList = event.productList;
+
+      emit(ProductLoading());
+      
+      if(event.index == 0) {
+        productList.sort((a, b) => b.dateCreated!.compareTo(a.dateCreated!));
+      }
+      if(event.index == 1) {
+        productList.sort((a, b) => a.dateCreated!.compareTo(b.dateCreated!));
+      }
+      if(event.index == 2) {
+        productList.sort((a, b) => double.parse(a.price!).compareTo(double.parse(b.price!)));
+      }
+      if(event.index == 3) {
+        productList.sort((a, b) => double.parse(b.price!).compareTo(double.parse(a.price!)));
+      }
+      if(event.index == 4) {
+        productList.sort((a, b) => b.totalSales!.compareTo(a.totalSales!));
+      }
+
+      emit(ProductLoaded(productList));
     });
   }
 }

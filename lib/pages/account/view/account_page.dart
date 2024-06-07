@@ -166,7 +166,7 @@ class AccountPage extends StatelessWidget {
                                           padding: const EdgeInsets.symmetric(vertical: 20),
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                                       ),
-                                      child: Text(AppLocalization.of(context).getTranslatedValue('save'), style: const TextStyle(fontSize: 17,),),
+                                      child: Text(AppLocalization.of(context).getTranslatedValue('save'), style: const TextStyle(fontSize: 17, color: Colors.white),),
                                     ),
                                   )
                                 ],
@@ -233,7 +233,7 @@ class AccountPage extends StatelessWidget {
                                           padding: const EdgeInsets.symmetric(vertical: 20),
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                                       ),
-                                      child: Text(AppLocalization.of(context).getTranslatedValue('save'), style: const TextStyle(fontSize: 17,),),
+                                      child: Text(AppLocalization.of(context).getTranslatedValue('save'), style: const TextStyle(fontSize: 17, color: Colors.white),),
                                     ),
                                   )
                                 ],

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +7,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:wedev_test/barrel/resources.dart';
 import 'package:wedev_test/barrel/widgets.dart';
 import 'package:wedev_test/localization/app_localization.dart';
-import 'package:wedev_test/pages/product/cubit/filter_cubit.dart';
 
 import '../../../model/filter.dart';
 import '../../../model/product.dart';
@@ -32,6 +33,8 @@ class ProductPage extends StatelessWidget {
         create: (context) => ProductBloc()..add(LoadProduct()),
         child: BlocConsumer<ProductBloc, ProductState>(
           listener: (context, state) {
+            if(state is ProductLoading) {
+            }
             if (state is ProductLoaded) {
               _productList = state.product;
             }
@@ -46,7 +49,12 @@ class ProductPage extends StatelessWidget {
               return Column(
                 children: [
 
-                  _filterWidget(context),
+                  _filterWidget(
+                    context,
+                    onApply: (int index) {
+                      context.read<ProductBloc>().add(ProductFilterEvent(productList: _productList, index: index));
+                    },
+                  ),
 
                   const SizedBox(height: 20,),
 
@@ -61,6 +69,7 @@ class ProductPage extends StatelessWidget {
                       childAspectRatio: (1 / 1.6),
                       children: List.generate(_productList.length, (index) => Card(
                         elevation: 2,
+                        color: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
                         ),
@@ -69,11 +78,14 @@ class ProductPage extends StatelessWidget {
 
                             Expanded(
                               flex: 3,
-                              child: CachedNetworkImage(
-                                imageUrl: _productList[index].images?.first.src ?? '',
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator())),
-                                errorWidget: (context, url, error) => const Icon(Icons.error, size: 20,),
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                                child: CachedNetworkImage(
+                                  imageUrl: _productList[index].images?.first.src ?? '',
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator())),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error, size: 20,),
+                                ),
                               ),
                             ),
 
@@ -154,7 +166,7 @@ class ProductPage extends StatelessWidget {
     );
   }
 
-  Widget _filterWidget(BuildContext context) {
+  Widget _filterWidget(BuildContext context, {required Function(int) onApply}) {
     final filterOption = [
       Filter(title: 'newest', value: false),
       Filter(title: 'oldest', value: false),
@@ -162,8 +174,10 @@ class ProductPage extends StatelessWidget {
       Filter(title: 'price_high_low', value: false),
       Filter(title: 'best_selling', value: false),
     ];
+
+    int? selectedIndex;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: SizedBox(
         height: 60,
         child: Card(
@@ -171,6 +185,7 @@ class ProductPage extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10)
           ),
+          color: Colors.white,
           child: Row(
             children: [
               TextButton.icon(
@@ -203,58 +218,46 @@ class ProductPage extends StatelessWidget {
 
                           const SizedBox(height: 5,),
 
-                          MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create: (context) => CheckboxCubit(),
-                              ),
-                              BlocProvider(
-                                create: (context) => FilterCubit(),
-                              ),
-                            ],
-                            child: BlocConsumer<FilterCubit, FilterState>(
-                              listener: (context, state) {
-                              },
-                              builder: (context, state) {
-                                return Column(
-                                  children: List.generate(filterOption.length, (index) {
-                                    return ListTile(
-                                      leading: SizedBox(
-                                        height: 24,
-                                        width: 24,
-                                        child: Checkbox(
-                                          activeColor: kPrimaryColor,
-                                          side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(width: 2, color: kPrimaryColor)),
-                                          value: filterOption[index].value,
-                                          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                                          splashRadius: 0,
-                                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(5)),
-                                          onChanged: (bool? value) {
-                                            context.read<CheckboxCubit>().toggleCheckbox();
-                                          },
+                          Column(
+                            children: List.generate(filterOption.length, (index) {
+                              return BlocProvider(
+                                create: (context) => CheckboxCubit(filterOption.length),
+                                child: BlocBuilder<CheckboxCubit, List<bool>>(
+                                    builder: (context, state) {
+                                      return ListTile(
+                                        leading: SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: Checkbox(
+                                            activeColor: kPrimaryColor,
+                                            side: MaterialStateBorderSide.resolveWith((states) => const BorderSide(width: 2, color: kPrimaryColor)),
+                                            value: state[index],
+                                            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                                            splashRadius: 0,
+                                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(5)),
+                                            onChanged: (bool? value) {
+                                              selectedIndex = index;
+                                              context.read<CheckboxCubit>().toggleCheckbox(index);
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                      title: Text(AppLocalization.of(context).getTranslatedValue(_filterList[index]), style: const TextStyle(fontSize: 15),),
-                                      contentPadding: EdgeInsets.zero,
-                                      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                                      dense: true,
-                                      horizontalTitleGap: 0,
-                                      onTap: () {
+                                        title: Text(AppLocalization.of(context).getTranslatedValue(_filterList[index]), style: const TextStyle(fontSize: 15),),
+                                        contentPadding: EdgeInsets.zero,
+                                        visualDensity: const VisualDensity( vertical: -4),
+                                        dense: true,
+                                        horizontalTitleGap: 0,
+                                        onTap: () {
+                                          selectedIndex = index;
+                                          context.read<CheckboxCubit>().toggleCheckbox(index);
 
-                                        context.read<FilterCubit>().onFilter(_productList, index);
-
-                                        _productList.forEach((element) {
-                                          print(element.dateCreated);
-                                        });
-                                        context.read<CheckboxCubit>().toggleCheckbox();
-                                      },
-                                    );
-                                  }),
-                                );
-                              }
-                            ),
+                                        },
+                                      );
+                                    }
+                                ),
+                              );
+                            }),
                           ),
 
                           const SizedBox(height: 30,),
@@ -278,6 +281,9 @@ class ProductPage extends StatelessWidget {
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {
+                                    if(selectedIndex != null) {
+                                      onApply(selectedIndex!);
+                                    }
                                     Navigator.pop(context);
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -285,7 +291,7 @@ class ProductPage extends StatelessWidget {
                                       padding: const EdgeInsets.symmetric(vertical: 20),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                                   ),
-                                  child: Text(AppLocalization.of(context).getTranslatedValue('apply'), style: const TextStyle(fontSize: 17,),),
+                                  child: Text(AppLocalization.of(context).getTranslatedValue('apply'), style: const TextStyle(fontSize: 17, color: Colors.white),),
                                 ),
                               )
                             ],
