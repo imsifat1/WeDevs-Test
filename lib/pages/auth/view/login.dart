@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedev_test/barrel/resources.dart';
 import 'package:wedev_test/pages/auth/bloc/auth_bloc.dart';
-import 'package:wedev_test/pages/auth/bloc/toggle_visibility_cubit.dart';
+import 'package:wedev_test/pages/auth/cubit/toggle_visibility_cubit.dart';
 import 'package:wedev_test/route/route_manager.dart';
 
 import '../../../barrel/utils.dart';
@@ -121,9 +122,11 @@ class Login extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 20),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          backgroundColor: kPrimaryColor,
                       ),
-                      child: Text(AppLocalization.of(context).getTranslatedValue('login'), style: const TextStyle(fontSize: 17),),
+
+                      child: Text(AppLocalization.of(context).getTranslatedValue('login'), style: const TextStyle(fontSize: 17, color: Colors.white),),
                     ),
 
                     const SizedBox(height: 40,),

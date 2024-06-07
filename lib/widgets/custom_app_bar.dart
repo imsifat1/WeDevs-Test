@@ -8,16 +8,14 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool centerTitle;
   final Color backgroundColor;
   final String title;
-  final bool searchBarEnabled;
-  Function()? onSearch;
+  final List<Widget>? actions;
 
   CustomAppbar({Key? key,
     this.backButtonEnabled = true,
     this.centerTitle = true,
     this.backgroundColor = kPrimaryColor,
     this.title = "",
-    this.searchBarEnabled = false,
-    this.onSearch,
+    this.actions,
   }) : super(key: key);
 
   @override
@@ -29,7 +27,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: centerTitle,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      actions: searchBarEnabled ? [IconButton(onPressed: () => onSearch, icon: const Icon(Icons.search, color: Colors.black, size: 22,))] : null,
+      actions: actions,
     );
   }
 

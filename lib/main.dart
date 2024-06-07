@@ -1,3 +1,4 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:wedev_test/barrel/utils.dart';
 
+import 'app_bloc_observer.dart';
 import 'barrel/themes.dart';
 import 'localization/app_localization.dart';
 import 'route/route_manager.dart';
@@ -12,6 +14,9 @@ import 'route/route_manager.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: kDebugMode ? ".env.development" : ".env.production");
+
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = AppBlocObserver();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
     runApp(const MyApp());
   });

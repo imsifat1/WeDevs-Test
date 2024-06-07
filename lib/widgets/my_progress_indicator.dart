@@ -19,7 +19,6 @@ class MyProgressIndicator {
           child: Center(
             child: Material(
               elevation: 10,
-              color: Theme.of(context).backgroundColor,
               shape: RoundedRectangleBorder(
                 side: const BorderSide(width: 1, color: Colors.white24),
                 borderRadius: BorderRadius.circular(5),

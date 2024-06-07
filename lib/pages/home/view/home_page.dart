@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
       body: _widgetOptions.elementAt(_bottomNavIndex),
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom != 0 ? null : FloatingActionButton(
         // backgroundColor: LinearGradient(colors: []),
+        backgroundColor: Colors.transparent,elevation: 0,
         child: Container(
           width: 60,
           height: 60,
